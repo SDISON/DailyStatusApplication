@@ -1,0 +1,119 @@
+﻿@model DailyStatus.ViewModels.Form
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-5">
+            <h2>Today's Status</h2>
+        </div>
+        <div class="col-sm-5">
+            <div class="username">
+                <b>@ViewBag.Session</b>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@using (Html.BeginForm("SaveStatus", "Home"))
+{
+    <div class="container-fluid">
+        <div class="row col-md-offset-2">
+            <div class="col-sm-5">
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.FormIntern.Name)
+                    @Html.TextBoxFor(m => m.FormIntern.Name, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+            </div>
+
+            <div class="col-sm-5">
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.FormIntern.Email)
+                    @Html.TextBoxFor(m => m.FormIntern.Email, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <div class="row col-md-offset-2">
+            <div class="col-sm-5">
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.FormIntern.Mentor)
+                    @Html.TextBoxFor(m => m.FormIntern.Mentor, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+            </div>
+
+            <div class="col-sm-5">
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.FormIntern.Group)
+                    @Html.TextBoxFor(m => m.FormIntern.Group, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row col-md-offset-2">
+            <div class="col-sm-5">
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.FormIntern.JoiningDate)
+                    @Html.TextBoxFor(m => m.FormIntern.JoiningDate, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+            </div>
+
+            <div class="col-sm-5">
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.FormStatus.Date)
+                    @Html.TextBoxFor(m => m.FormStatus.Date, new { @Value = DateTime.Now.ToShortDateString(), @class = "form-control", @readonly = "readonly" })
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row mt-10">
+            <div class="col-sm-3">
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.FormStatus.TaskDone)
+                    @Html.TextAreaFor(m => m.FormStatus.TaskDone, new { @class = "form-control", @rows = "7", @cols = "100" })
+                    @Html.ValidationMessageFor(m => m.FormStatus.TaskDone, "Field Required")
+                </div>
+            </div>
+
+            <div class="col-sm-3 col-md-offset-1">
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.FormStatus.TaskForTomorrow)
+                    @Html.TextAreaFor(m => m.FormStatus.TaskForTomorrow, new { @class = "form-control", @rows = "7", @cols = "100" })
+                    @Html.ValidationMessageFor(m => m.FormStatus.TaskForTomorrow, "Field Required")
+                </div>
+            </div>
+
+            <div class="col-sm-3 col-md-offset-1">
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.FormStatus.DifficultyFaced)
+                    @Html.TextAreaFor(m => m.FormStatus.DifficultyFaced, new { @class = "form-control", @rows = "7", @cols = "20" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="btn-text-center">
+                <button class="btn btn-primary" type="submit">Save</button>
+            </div>
+
+        </div>
+    </div>
+}
+
+@section scripts
+    {
+    <script>
+    if (@ViewBag.Status == 2)
+    {
+        toastr.error("Some error occured");
+    }
+    else if (@ViewBag.Status == 1)
+    {
+        toastr.success("Successsfully saved");
+    }
+    </script>
+}

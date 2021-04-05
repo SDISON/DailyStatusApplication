@@ -1,0 +1,39 @@
+﻿@model DailyStatus.ViewModels.StatusList
+@{
+    ViewBag.Title = "View Intern";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-5">
+            <h2>@ViewBag.Title.</h2>
+        </div>
+        <div class="col-sm-5">
+            <div class="username">
+                <b>@Session["Email"].ToString().Split('@')[0]</b>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table table-striped table-hover table-bordered border-primary align-middle">
+    <thead>
+        <tr>
+            <th scope="col">@Html.DisplayNameFor(m => m.Statuses[0].Date)</th>
+            <th scope="col">@Html.DisplayNameFor(m => m.Statuses[0].TaskDone)</th>
+            <th scope="col">@Html.DisplayNameFor(m => m.Statuses[0].TaskForTomorrow)</th>
+            <th scope="col">@Html.DisplayNameFor(m => m.Statuses[0].DifficultyFaced)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var status in Model.Statuses)
+        {
+            <tr>
+                <th scope="row">@status.Date</th>
+                <td>@status.TaskDone</td>
+                <td>@status.TaskForTomorrow</td>
+                <td>@status.DifficultyFaced</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,122 @@
+﻿@model DailyStatus.ViewModels.StatusList
+@{
+    ViewBag.Title = "Status List";
+}
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-5">
+            <h2>@ViewBag.Title</h2>
+        </div>
+        <div class="col-sm-5">
+            <div class="username">
+                <b>@ViewBag.Session</b>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<div class=" container">
+    <div class="row">
+        <div class="col-sm-3">
+            @Html.Label("Name")
+        </div>
+        <div class="col-sm-3">
+            @Html.Label("Mentor")
+        </div>
+        <div class="col-sm-3">
+            @Html.Label("From Date")
+        </div>
+        <div class="col-sm-3">
+            @Html.Label("To Date")
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            @Html.TextBoxFor(m => m.Intern.Name, new { @class = "form-control", @readonly = "readonly" })
+        </div>
+        <div class="col-sm-3">
+            @Html.TextBoxFor(m => m.Intern.Mentor, new { @class = "form-control", @readonly = "readonly" })
+        </div>
+        <div class="col-sm-3">
+
+            @Html.Editor("FromDate", new { htmlAttributes = new { @class = "FromDate", @autocomplete = "off", @Value = ViewBag.From } })
+        </div>
+        <div class="col-sm-3">
+
+            @Html.Editor("ToDate", new { htmlAttributes = new { @class = "ToDate", @autocomplete = "off", @Value = ViewBag.To } })
+        </div>
+    </div>
+</div>
+<br>
+
+    <div class="table-responsive table-wrapper">
+        <table class="table table-striped table-hover table-bordered border-primary align-middle">
+            <thead>
+                <tr>
+                    <th scope="col">@Html.DisplayNameFor(m => m.Statuses[0].Date)</th>
+                    <th scope="col">@Html.DisplayNameFor(m => m.Statuses[0].TaskDone)</th>
+                    <th scope="col">@Html.DisplayNameFor(m => m.Statuses[0].TaskForTomorrow)</th>
+                    <th scope="col">@Html.DisplayNameFor(m => m.Statuses[0].DifficultyFaced)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var status in Model.Statuses)
+                {
+                    <tr>
+                        <td>@status.Date</td>
+                        <td>@status.TaskDone</td>
+                        <td>@status.TaskForTomorrow</td>
+                        <td>@status.DifficultyFaced</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @section scripts{
+        @Scripts.Render("~/bundles/jquerymin")
+        <script>
+            var length = parseInt("@ViewBag.length");
+        $(document).ready(function () {
+            $(".FromDate").datepicker({
+                dateFormat: "dd-mm-yy",
+                changemonth: true,
+                changeyear: true,
+                minDate: "@Model.Intern.JoiningDate",
+                onSelect: function(text, inst) {
+                    $('.ToDate').datepicker("destroy");
+                    $(".ToDate").datepicker({
+                        dateFormat: "dd-mm-yy",
+                        changemonth: true,
+                        changeyear: true,
+                        minDate: text,
+                        onSelect: function (text, inst) {
+                            location.href = 'https://localhost:44359/YourList/' + $('.FromDate').val() + '/' + text + '/' + 10;
+                        }
+                    });
+                }
+            });
+            /*var scrollheight = $('.table-wrapper').get(0).scrollHeight;
+            var windowheight = $('.table-wrapper').get(0).clientHeight;
+            var scrolloffset = 20;
+            $('.table-wrapper').scrollTop(((scrollheight - (windowheight + scrolloffset)) / 10) * (length - 10));*/
+            scrollcheck();
+        });
+
+            function scrollcheck() {
+                var scrolltop = $('.table-wrapper').scrollTop();
+                var scrollheight = $('.table-wrapper').get(0).scrollHeight;
+                var windowheight = $('.table-wrapper').get(0).clientHeight;
+                var scrolloffset = 20;
+
+                if (scrolltop >= (scrollheight - (windowheight + scrolloffset))) {
+                    //fetch new items  
+                    location.href = 'https://localhost:44359/YourList/' + $('.FromDate').val() + '/' + $('.ToDate').val() + '/' + (length+10);
+                }
+                setTimeout('scrollcheck();', 1500);
+            }  
+        </script>
+    }

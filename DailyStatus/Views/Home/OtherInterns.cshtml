@@ -1,0 +1,135 @@
+﻿@model DailyStatus.ViewModels.OtherInterns
+@{
+    ViewBag.Title = "Other Interns";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-5">
+            <h2>@ViewBag.Title.</h2>
+        </div>
+        <div class="col-sm-5">
+            <div class="username">
+                <b>@ViewBag.Session</b>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+
+<div class=" container">
+    <div class="row">
+        <div class="col-sm-3">
+            @Html.Label("Mentors")
+        </div>
+        <div class="col-sm-3">
+            @Html.Label("Groups")
+        </div>
+        <div class="col-sm-3">
+            @Html.Label("Sort")
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            @{
+                List<SelectListItem> li = new List<SelectListItem>();
+                foreach (var mentor in Model.Mentors)
+                {
+                    if (mentor == ViewBag.Mentor)
+                    {
+                        li.Add(new SelectListItem { Text = mentor, Value = mentor, Selected = true});
+                        continue;
+                    }
+                    li.Add(new SelectListItem { Text = mentor, Value = mentor});
+                }
+            }
+            @Html.DropDownList("drop-mentors", li)
+        </div>
+        <div class="col-sm-3">
+            @{
+                li = new List<SelectListItem>();
+                foreach (var group in Model.Groups)
+                {
+                    if (group == ViewBag.Group)
+                    {
+                        li.Add(new SelectListItem { Text = group, Value = group, Selected = true });
+                        continue;
+                    }
+                    li.Add(new SelectListItem { Text = group, Value = group });
+                }
+            }
+            @Html.DropDownList("drop-groups", li)
+        </div>
+        <div class="col-sm-3">
+
+            @Html.CheckBox("Joining Date", new { @class="sort", @Value = ViewBag.Sort})
+            @Html.Label("Joining Date")
+        </div>
+    </div>
+</div>
+<br>
+
+
+<table class="table table-striped table-hover table-bordered border-primary align-middle">
+    <thead>
+        <tr class="text-center text-capitalize text text-info">
+            <td>@Html.DisplayNameFor(m => m.Interns[0].Name)</td>
+            <td>@Html.DisplayNameFor(m => m.Interns[0].Mentor)</td>
+            <td>@Html.DisplayNameFor(m => m.Interns[0].Group)</td>
+            <td>@Html.DisplayNameFor(m => m.Interns[0].JoiningDate)</td>
+            <td>@Html.DisplayNameFor(m => m.Interns[0].Email)</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var intern in Model.Interns)
+        {
+            <tr class="text-center" data-href="@Url.Action("ViewIntern", "Home")">
+                <td>@Html.ActionLink(@intern.Name, "ViewIntern", "Home", new {email = intern.Email}, null)</td>
+                <td>@intern.Mentor</td>
+                <td>@intern.Group</td>
+                <td>@intern.JoiningDate</td>
+                <td>@intern.Email</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section scripts
+    {
+    @Scripts.Render("~/bundles/jquerymin")
+    <script>
+        $(document).ready(function () {
+            $("#drop-mentors").on("change", function () {
+                var mentor = $("#drop-mentors").val();
+                if (!mentor)
+                    mentor = "All";
+                var group = $("#drop-groups").val();
+                if (!group)
+                    group = "All";
+                var sort = $(".sort").val();
+                location.href = 'https://localhost:44359/OtherInterns/' + mentor + '/' + group + '/' + sort;
+            });
+            $("#drop-groups").on("change", function () {
+                var mentor = $("#drop-mentors").val();
+                if (!mentor)
+                    mentor = "All";
+                var group = $("#drop-groups").val();
+                if (!group)
+                    group = "All";
+                var sort = $(".sort").is(":checked");
+                location.href = 'https://localhost:44359/OtherInterns/' + mentor + '/' + group + '/' + sort;
+            });
+            $(".sort").on("change", function () {
+                var mentor = $("#drop-mentors").val();
+                if (!mentor)
+                    mentor = "All";
+                var group = $("#drop-groups").val();
+                if (!group)
+                    group = "All";
+                var sort = $(".sort").is(":checked");
+                location.href = 'https://localhost:44359/OtherInterns/' + mentor + '/' + group + '/' + sort;
+            });
+        });
+    </script>
+}
